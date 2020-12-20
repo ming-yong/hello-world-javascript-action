@@ -24,8 +24,8 @@ try {
 	Toolkit.run(async (tools) => {
 		// Assign owner and repo data to variables
 
-		const owner = secrets.REPO_OWNER;
-		const repo = secrets.REPO;
+		const owner = process.env.REPO_OWNER;
+		const repo = process.env.REPO;
 
 		// Get the latest post in my jekyll site
 		var path = "_posts";
@@ -57,7 +57,7 @@ try {
 		// Create headers for DEV request
 		var headers = {
 			"Content-Type": "application/json",
-			"api-key": `${secrets.DEV_API_KEY}`,
+			"api-key": `${process.env.DEV_API_KEY}`,
 		};
 
 		// Make the API calls
