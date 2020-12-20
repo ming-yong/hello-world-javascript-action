@@ -19,6 +19,10 @@
   "homepage": "https://github.com/ming-yong/hello-world-javascript-action#readme",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/github": "^4.0.0"
+    "@actions/github": "^4.0.0",
+    "actions-toolkit": "^6.0.1",
+    "axios": "^0.21.0",
+    "btoa": "^1.2.1",
+    "dotenv": "^8.2.0"
   }
 }
