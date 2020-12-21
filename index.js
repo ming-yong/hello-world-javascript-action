@@ -38,7 +38,7 @@ try {
 
 		// Get repo posts data
 		myPosts = (
-			await tools.github.repos.getContents({
+			await tools.github.repos.getContent({
 				owner,
 				repo,
 				path,
@@ -47,36 +47,36 @@ try {
 
     myPostDate = myPosts[0]["name"].slice(0, 10);
     
-    console.log("post date");
-    console.log(myPostDate);
+		// Get the latest DEV posts
+		var devPosts;
+		var devPostDate;
+		var devPostTitle;
+		var devPostURL;
+		var masterRepoSHA; // SHA of Master Branch in Repo
+		var devPostContent;
+		var checkPostAmount;
 
-// 		// Get the latest DEV posts
-// 		var devPosts;
-// 		var devPostDate;
-// 		var devPostTitle;
-// 		var devPostURL;
-// 		var masterRepoSHA; // SHA of Master Branch in Repo
-// 		var devPostContent;
-// 		var checkPostAmount;
+		// Create headers for DEV request
+		var headers = {
+			"Content-Type": "application/json",
+			"api-key": `${process.env.DEV_API_KEY}`,
+		};
 
-// 		// Create headers for DEV request
-// 		var headers = {
-// 			"Content-Type": "application/json",
-// 			"api-key": `${process.env.DEV_API_KEY}`,
-// 		};
+		// Make the API calls
+		const getData = () => {
+			return axios({
+				method: "get",
+				url: "https://dev.to/api/articles/me?page=1&per_page=6",
+				headers: headers,
+			});
+		};
 
-// 		// Make the API calls
-// 		const getData = () => {
-// 			return axios({
-// 				method: "get",
-// 				url: "https://dev.to/api/articles/me?page=1&per_page=6",
-// 				headers: headers,
-// 			});
-// 		};
-
-// 		// Assign DEV data
-// 		devPosts = (await getData()).data;
-// 		checkPostAmount = devPosts.length > 10 ? 10 : devPosts.length;
+		// Assign DEV data
+		devPosts = (await getData()).data;
+    checkPostAmount = devPosts.length > 10 ? 10 : devPosts.length;
+    
+    console.log("post amount");
+    console.log(checkPostAmount);
 
 // 		for (let index = 0; index < checkPostAmount; index++) {
 // 			devPostDate = devPosts[index]["published_at"]; // ex. 2020-02-12T12:45:27.741Z
