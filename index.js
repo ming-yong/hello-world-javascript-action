@@ -98,19 +98,19 @@ try {
 				// Remove extraneous indentation
         fileContents = fileContents.replace(/^ {4}/gm, "");
         
-        console.log("show file content");
+				// Encode it in Base64 Encoding
+				const encodedContents = btoa(fileContents);
 
-// 				// Encode it in Base64 Encoding
-// 				const encodedContents = btoa(fileContents);
-
-// 				// Get list of repo branches
-// 				refsData = (
-// 					await tools.github.git.listRefs({
-// 						owner,
-// 						repo,
-// 					})
-// 				).data;
-
+				// Get list of repo branches
+				refsData = (
+					await tools.github.git.listRefs({
+						owner,
+						repo,
+					})
+				).data;
+        
+        console.log("refsData");
+        console.log(refsData);
 // 				// If branch does not exist, create branch
 // 				if (refsData.filter((data) => data.ref == "refs/heads/dev_to_jekyll").length == 0) {
 // 					// Get Master Branch SHA
@@ -176,8 +176,8 @@ try {
 // 		tools.exit.success("There are no posts on DEV newer than the posts on your Jekyll site.");
 	});
 
-	const payload = JSON.stringify(github.context.payload, undefined, 2);
-	console.log(`The event payload: ${payload}`);
+	// const payload = JSON.stringify(github.context.payload, undefined, 2);
+	// console.log(`The event payload: ${payload}`);
 } catch (error) {
 	core.setFailed(error.message);
 }
