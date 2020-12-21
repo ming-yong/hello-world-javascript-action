@@ -108,76 +108,74 @@ try {
 						repo,
 					})
 				).data;
-        
-        console.log("refsData");
-        console.log(refsData);
-// 				// If branch does not exist, create branch
-// 				if (refsData.filter((data) => data.ref == "refs/heads/dev_to_jekyll").length == 0) {
-// 					// Get Master Branch SHA
-// 					refsFiltered = refsdata.filter((ref) => ref.ref == "refs/heads/master");
-// 					masterRepoSHA = refsFiltered[0]["object"]["sha"];
 
-// 					// Create a New Branch for the PR
-// 					newBranch = await tools.github.git.createRef({
-// 						owner,
-// 						repo,
-// 						ref: "refs/heads/dev_to_jekyll",
-// 						sha: masterRepoSHA,
-// 					});
+				// If branch does not exist, create branch
+				if (refsData.filter((data) => data.ref == "refs/heads/dev_to_jekyll").length == 0) {
+					// Get Master Branch SHA
+					refsFiltered = refsdata.filter((ref) => ref.ref == "refs/heads/master");
+					masterRepoSHA = refsFiltered[0]["object"]["sha"];
 
-// 					// Create a new file in the new branch
-// 					newFile = await tools.github.repos.createOrUpdateFile({
-// 						owner,
-// 						repo,
-// 						branch: "dev_to_jekyll",
-// 						path: `_posts/${newJekyllPostFileName}`,
-// 						message: `New markdown file for ${devPostTitle}`,
-// 						content: encodedContents,
-// 					});
-// 				}
+					// Create a New Branch for the PR
+					newBranch = await tools.github.git.createRef({
+						owner,
+						repo,
+						ref: "refs/heads/dev_to_jekyll",
+						sha: masterRepoSHA,
+					});
 
-// 				// Create Pull Request
-// 				// Get list of all pull requests in working branch
-// 				var prArray = (
-// 					await tools.github.pulls.list({
-// 						owner,
-// 						repo,
-// 						head: "dev_to_jekyll",
-// 					})
-// 				).data;
+					// Create a new file in the new branch
+					newFile = await tools.github.repos.createOrUpdateFile({
+						owner,
+						repo,
+						branch: "dev_to_jekyll",
+						path: `_posts/${newJekyllPostFileName}`,
+						message: `New markdown file for ${devPostTitle}`,
+						content: encodedContents,
+					});
+				}
 
-// 				var prArrayFiltered = prArray.filter((pr) => pr.title == `New DEV Post: ${devPostTitle}`);
+				// Create Pull Request
+				// Get list of all pull requests in working branch
+				var prArray = (
+					await tools.github.pulls.list({
+						owner,
+						repo,
+						head: "dev_to_jekyll",
+					})
+				).data;
 
-// 				// If PR exists, update current pull request
-// 				if (prArrayFiltered.length > 0) {
-// 					var prNumber = prArrayFiltered[0].number;
-// 					newPr = await tools.github.pulls.update({
-// 						owner,
-// 						repo,
-// 						pull_number: prNumber,
-// 					});
-// 					tools.log.success("PR updated");
+				var prArrayFiltered = prArray.filter((pr) => pr.title == `New DEV Post: ${devPostTitle}`);
 
-// 					// If PR does not exist, create a new one
-// 				} else if (prArrayFiltered.length == 0) {
-// 					newPR = await tools.github.pulls.create({
-// 						owner,
-// 						repo,
-// 						title: `New DEV Post: ${devPostTitle}`,
-// 						head: "dev_to_jekyll",
-// 						base: "master",
-// 						body: `Automated PR to add the new DEV blog post, ${devPostTitle}, to your Jekyll site as markdown.`,
-// 					});
-// 					tools.log.success("PR created");
-// 				}
-// 				tools.exit.success("Processing complete");
+				// If PR exists, update current pull request
+				if (prArrayFiltered.length > 0) {
+					var prNumber = prArrayFiltered[0].number;
+					newPr = await tools.github.pulls.update({
+						owner,
+						repo,
+						pull_number: prNumber,
+					});
+					tools.log.success("PR updated");
+
+					// If PR does not exist, create a new one
+				} else if (prArrayFiltered.length == 0) {
+					newPR = await tools.github.pulls.create({
+						owner,
+						repo,
+						title: `New DEV Post: ${devPostTitle}`,
+						head: "dev_to_jekyll",
+						base: "master",
+						body: `Automated PR to add the new DEV blog post, ${devPostTitle}, to your Jekyll site as markdown.`,
+					});
+					tools.log.success("PR created");
+				}
+				tools.exit.success("Processing complete");
 			}
 		}
-// 		tools.exit.success("There are no posts on DEV newer than the posts on your Jekyll site.");
+		tools.exit.success("There are no posts on DEV newer than the posts on your Jekyll site.");
 	});
 
-	// const payload = JSON.stringify(github.context.payload, undefined, 2);
-	// console.log(`The event payload: ${payload}`);
+	const payload = JSON.stringify(github.context.payload, undefined, 2);
+	console.log(`The event payload: ${payload}`);
 } catch (error) {
 	core.setFailed(error.message);
 }
