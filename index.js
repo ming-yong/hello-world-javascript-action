@@ -74,32 +74,31 @@ try {
 		// Assign DEV data
 		devPosts = (await getData()).data;
     checkPostAmount = devPosts.length > 10 ? 10 : devPosts.length;
-    
-    console.log("post amount");
-    console.log(checkPostAmount);
 
-// 		for (let index = 0; index < checkPostAmount; index++) {
-// 			devPostDate = devPosts[index]["published_at"]; // ex. 2020-02-12T12:45:27.741Z
-// 			if (new Date(devPostDate) >= new Date(myPostDate)) {
-// 				devPostTitle = devPosts[index]["title"];
-// 				devPostURL = devPosts[index]["url"];
-// 				devPostContent = devPosts[index]["body_markdown"];
-// 				newJekyllPostFileName = `${devPostDate.split("T")[0]}-${devPostTitle.toLowerCase().split(" ").join("-")}.md`;
+		for (let index = 0; index < checkPostAmount; index++) {
+			devPostDate = devPosts[index]["published_at"]; // ex. 2020-02-12T12:45:27.741Z
+			if (new Date(devPostDate) >= new Date(myPostDate)) {
+				devPostTitle = devPosts[index]["title"];
+				devPostURL = devPosts[index]["url"];
+				devPostContent = devPosts[index]["body_markdown"];
+				newJekyllPostFileName = `${devPostDate.split("T")[0]}-${devPostTitle.toLowerCase().split(" ").join("-")}.md`;
 
-// 				// Create Markdown File
-// 				const fileContents = `      
-//         ---
-//         layout: post
-//         category: dev
-//         date: ${devPostDate}
-//         title: ${devPostTitle}
-//         link: ${devPostURL}
-//         ---
-//         ${devPostContent}
-//         `.trim();
+				// Create Markdown File
+				const fileContents = `      
+        ---
+        layout: post
+        category: dev
+        date: ${devPostDate}
+        title: ${devPostTitle}
+        link: ${devPostURL}
+        ---
+        ${devPostContent}
+        `.trim();
 
-// 				// Remove extraneous indentation
-// 				fileContents = fileContents.replace(/^ {4}/gm, "");
+				// Remove extraneous indentation
+        fileContents = fileContents.replace(/^ {4}/gm, "");
+        
+        console.log("show file content");
 
 // 				// Encode it in Base64 Encoding
 // 				const encodedContents = btoa(fileContents);
@@ -173,7 +172,7 @@ try {
 // 				}
 // 				tools.exit.success("Processing complete");
 // 			}
-// 		}
+		}
 // 		tools.exit.success("There are no posts on DEV newer than the posts on your Jekyll site.");
 	});
 
