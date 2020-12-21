@@ -84,7 +84,7 @@ try {
 				newJekyllPostFileName = `${devPostDate.split("T")[0]}-${devPostTitle.toLowerCase().split(" ").join("-")}.md`;
 
 				// Create Markdown File
-				const fileContents = `      
+				let fileContents = `      
         ---
         layout: post
         category: dev
