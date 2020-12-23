@@ -15,7 +15,7 @@ try {
 		// For my latest post's date
 		let myPostDate;
 		let myPosts;
-		let path = "_posts";
+		let path = "_posts/dev";
 		// For my latest DEV posts
 		const checkPostLimit = 15;
 		let newJekyllPostFileName;
@@ -90,10 +90,10 @@ try {
 				tools.github.repos.createOrUpdateFileContents({
 					owner,
 					repo,
-					branch: target_branch,
-					path: `_posts/${newJekyllPostFileName}`,
+					path: `_posts/dev/${newJekyllPostFileName}`,
 					message: `New markdown file for ${devPostTitle}`,
 					content: encodedContents,
+					branch: target_branch
 				});
 			}
 
