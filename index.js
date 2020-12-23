@@ -87,7 +87,7 @@ try {
 				const encodedContents = btoa(fileContents);
 
 				// Create that file in our branch
-				tools.github.repos.createOrUpdateFileContents({
+				await tools.github.repos.createOrUpdateFileContents({
 					owner,
 					repo,
 					path: `_posts/dev/${newJekyllPostFileName}`,
@@ -103,7 +103,7 @@ try {
 		/**
 		 * Create a PR
 		 */
-		tools.github.pulls.create({
+		await tools.github.pulls.create({
 			owner,
 			repo,
 			title: pr_title,
