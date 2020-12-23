@@ -66,7 +66,8 @@ try {
 				devPostTitle = devPosts[index]["title"];
 				devPostURL = devPosts[index]["url"];
 				devPostContent = devPosts[index]["body_markdown"];
-				newJekyllPostFileName = `${devPostDate.split("T")[0]}-${devPostTitle.toLowerCase().split(" ").join("-")}.md`;
+				newJekyllPostFileName = `${devPostDate.split("T")[0]}-${devPostTitle.toLowerCase().split(" ").join("-")
+				.replace(/[^a-z0-9]/gmi, " ").replace(/\s+/g, "")}.md`;
 
 				// Create Markdown File
 				let fileContents = `      
