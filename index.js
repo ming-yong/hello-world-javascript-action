@@ -66,7 +66,11 @@ try {
 				devPostTitle = devPosts[index]["title"];
 				devPostURL = devPosts[index]["url"];
 				devPostContent = devPosts[index]["body_markdown"];
-				newJekyllPostFileName = `${devPostDate.split("T")[0]}-${devPostTitle.toLowerCase().split(" ").join("-").replace(/[^a-z0-9-]/gmi,"")}.md`;
+				newJekyllPostFileName = `${devPostDate.split("T")[0]}-${devPostTitle
+					.toLowerCase()
+					.split(" ")
+					.join("-")
+					.replace(/[^a-z0-9-]/gim, "")}.md`;
 
 				// Create Markdown File
 				let fileContents = `      
@@ -93,27 +97,50 @@ try {
 					path: `_posts/dev/${newJekyllPostFileName}`,
 					message: `New markdown file for ${devPostTitle}`,
 					content: encodedContents,
-					branch: target_branch
+					branch: target_branch,
 				});
 			}
 
-			tools.log.success(`Post#${ index + 1 }: Added ${ devPostTitle }!`);
+			tools.log.success(`Post#${index + 1}: Added ${devPostTitle}!`);
 		}
 
 		/**
-		 * Create a PR
+		 * Create or update a PR
 		 */
-		await tools.github.pulls.create({
-			owner,
-			repo,
-			title: pr_title,
-			head: target_branch,
-			base: "master",
-		});
+		// Get list of all pull requests in working branch
+		let prArray = (
+			await tools.github.pulls.list({
+				owner,
+				repo,
+				head: target_branch,
+			})
+		).data;
+		let prArrayFiltered = prArray.filter((pr) => pr.title == pr_title);
 
+		if (prArrayFiltered.length > 0) {
+			let prNumber = prArrayFiltered[0].number;
+
+			await tools.github.pulls.update({
+				owner,
+				repo,
+				pull_number: prNumber,
+			});
+
+			tools.log.success("PR updated");
+		} else if (prArrayFiltered.length == 0) {
+			
+			await tools.github.pulls.create({
+				owner,
+				repo,
+				title: pr_title,
+				head: target_branch,
+				base: "master",
+			});
+
+			tools.log.success("PR created");
+		}
 		tools.exit.success("Done!");
 	});
-
 } catch (error) {
 	core.setFailed(error.message);
 }
