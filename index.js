@@ -9,9 +9,9 @@ try {
 	Toolkit.run(async (tools) => {
 		const owner = process.env.REPO_OWNER;
 		const repo = process.env.REPO;
-		const target_branch = "dev-posts";
 		const today = new Date();
 		const pr_title = `Dev posts ${today.getFullYear()}/${today.getMonth() + 1}`;
+		const target_branch = `dev-posts-${today.getFullYear()}-${today.getMonth() + 1}`;
 		// For my latest post's date
 		let myPostDate;
 		let myPosts;
@@ -25,6 +25,15 @@ try {
 		let devPostDate;
 		let devPostURL;
 		let devPosts;
+
+		/**
+		 * Create a branch
+		 */
+		await tools.github.repos.getBranch({
+			owner,
+			repo,
+			branch:target_branch,
+		});
 
 		/**
 		 * Get my latest post's date from the repo posts data
@@ -74,15 +83,16 @@ try {
 
 				// Create Markdown File
 				let fileContents = `      
-        ---
-        layout: post
-        category: dev
-        date: ${devPostDate}
-        title: ${devPostTitle}
-        link: ${devPostURL}
-        ---
-        ${devPostContent}
-        `.trim();
+---
+layout: post
+category: dev
+date: ${devPostDate}
+title: ${devPostTitle}
+link: ${devPostURL}
+---
+
+${devPostContent}
+`.trim();
 
 				// Remove extraneous indentation
 				fileContents = fileContents.replace(/^ {4}/gm, "");
@@ -128,7 +138,6 @@ try {
 
 			tools.log.success("PR updated");
 		} else if (prArrayFiltered.length == 0) {
-			
 			await tools.github.pulls.create({
 				owner,
 				repo,
