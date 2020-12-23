@@ -97,7 +97,7 @@ try {
 				});
 			}
 
-			tools.log.success(`Post#${ index }: Added ${ devPostTitle }!`);
+			tools.log.success(`Post#${ index + 1 }: Added ${ devPostTitle }!`);
 		}
 
 		/**
@@ -107,8 +107,8 @@ try {
 			owner,
 			repo,
 			title: pr_title,
-			head: "master",
-			base: target_branch,
+			head: target_branch,
+			base: "master",
 		});
 
 		tools.exit.success("Done!");
