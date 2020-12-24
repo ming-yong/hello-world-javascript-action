@@ -9,9 +9,9 @@ try {
 	Toolkit.run(async (tools) => {
 		const owner = process.env.REPO_OWNER;
 		const repo = process.env.REPO;
+		const target_branch = "dev-posts";
 		const today = new Date();
 		const pr_title = `Dev posts ${today.getFullYear()}/${today.getMonth() + 1}`;
-		const target_branch = `dev-posts`;
 		// For my latest post's date
 		let myPostDate;
 		let myPosts;
@@ -25,28 +25,6 @@ try {
 		let devPostDate;
 		let devPostURL;
 		let devPosts;
-		// Find PR if it exists
-		let prNumber;
-		let prFiles;
-		let prArray = (
-			await tools.github.pulls.list({
-				owner,
-				repo,
-				head: target_branch,
-			})
-		).data;
-		let prFiltered = prArray.filter((pr) => pr.title == pr_title);
-		let prFound = prFiltered.length > 0 ? true : false;
-
-		if (prFound) {
-			prNumber = prFiltered[0].number;
-
-			prFiles = await tools.github.pulls.listFiles({
-				owner,
-				repo,
-				pull_number: prNumber,
-			});
-		}
 
 		/**
 		 * Get my latest post's date from the repo posts data
@@ -113,28 +91,15 @@ ${devPostContent}
 				// Encode it in Base64 Encoding
 				const encodedContents = btoa(fileContents);
 
-				let findFile = prFiles.filter((file) => file[0]["filename"] == newJekyllPostFileName);
-
-				if (findFile.length > 0) {
-					await tools.github.repos.createOrUpdateFileContents({
-						owner,
-						repo,
-						path: `_posts/dev/${newJekyllPostFileName}`,
-						message: `New markdown file for ${devPostTitle}`,
-						content: encodedContents,
-						branch: target_branch,
-						sha: findFile["sha"]
-					});
-				} else {
-					await tools.github.repos.createOrUpdateFileContents({
-						owner,
-						repo,
-						path: `_posts/dev/${newJekyllPostFileName}`,
-						message: `New markdown file for ${devPostTitle}`,
-						content: encodedContents,
-						branch: target_branch,
-					});
-				}
+				// Create that file in our branch
+				await tools.github.repos.createOrUpdateFileContents({
+					owner,
+					repo,
+					path: `_posts/dev/${newJekyllPostFileName}`,
+					message: `New markdown file for ${devPostTitle}`,
+					content: encodedContents,
+					branch: target_branch,
+				});
 			}
 
 			tools.log.success(`Post#${index + 1}: Added ${devPostTitle}!`);
@@ -143,14 +108,28 @@ ${devPostContent}
 		/**
 		 * Create or update a PR
 		 */
-		if (prFound) {
+		let prArray = (
+			await tools.github.pulls.list({
+				owner,
+				repo,
+				head: target_branch,
+			})
+		).data;
+		let prArrayFiltered = prArray.filter((pr) => pr.title == pr_title);
+
+		if (prArrayFiltered.length > 0) {
+			let prNumber = prArrayFiltered[0].number;
+
 			await tools.github.pulls.update({
 				owner,
 				repo,
 				pull_number: prNumber,
 			});
+			
 			tools.log.success("PR updated");
-		} else {
+
+		} else if (prArrayFiltered.length == 0) {
+			
 			await tools.github.pulls.create({
 				owner,
 				repo,
@@ -158,9 +137,10 @@ ${devPostContent}
 				head: target_branch,
 				base: "master",
 			});
+
 			tools.log.success("PR created");
 		}
-
+		
 		tools.exit.success("Done!");
 	});
 } catch (error) {
