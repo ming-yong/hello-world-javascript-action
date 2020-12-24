@@ -1,22 +1,10 @@
-# Hello world javascript action
+# Pull DEV Posts to Jekyll Monthly GitHub Action
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
+This repo is based on [dev-posts-to-jekyll-markdown-action](https://github.com/bencgreenberg/dev-posts-to-jekyll-markdown-action) by [bencgreenberg](https://github.com/bencgreenberg).
 
-## Inputs
+## Things I changed
 
-### `who-to-greet`
-
-**Required** The name of the person to greet. Default `"World"`.
-
-## Outputs
-
-### `time`
-
-The time we greeted you.
-
-## Example usage
-
-uses: actions/hello-world-javascript-action@v1.1
-with:
-  who-to-greet: 'Mona the Octocat'
+- Pull in the entire blog post instead of creating cards.
+- Check the latest 15 DEV posts.
+- Do not delete any existing posts on my Jekyll site.
   
