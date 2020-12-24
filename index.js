@@ -113,7 +113,7 @@ ${devPostContent}
 				// Encode it in Base64 Encoding
 				const encodedContents = btoa(fileContents);
 
-				let findFile = prFiles.filter((file) => file["filename"] == newJekyllPostFileName);
+				let findFile = prFiles.filter((file) => file[0]["filename"] == newJekyllPostFileName);
 
 				if (findFile.length > 0) {
 					await tools.github.repos.createOrUpdateFileContents({
