@@ -41,7 +41,7 @@ try {
 		if (prFound) {
 			prNumber = prFiltered[0].number;
 
-			prFiles = tools.github.pulls.listFiles({
+			prFiles = await tools.github.pulls.listFiles({
 				owner,
 				repo,
 				pull_number: prNumber,
