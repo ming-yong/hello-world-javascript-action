@@ -36,7 +36,7 @@ try {
 			})
 		).data;
 		let prFiltered = prArray.filter((pr) => pr.title == pr_title);
-		let prFound = prFound.length > 0 ? true : false;
+		let prFound = prFiltered.length > 0 ? true : false;
 
 		if (prFound) {
 			prNumber = prFiltered[0].number;
