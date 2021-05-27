@@ -1,8 +1,10 @@
-# Pull DEV Posts to Jekyll Monthly GitHub Action
+# DEV posts to blog action
 
-This repo is based on [dev-posts-to-jekyll-markdown-action](https://github.com/bencgreenberg/dev-posts-to-jekyll-markdown-action) by [bencgreenberg](https://github.com/bencgreenberg).
+This is a JS github action that checks my DEV posts and create markdown files for new ones.
 
-## Things I changed
+This is based on [dev-posts-to-jekyll-markdown-action](https://github.com/bencgreenberg/dev-posts-to-jekyll-markdown-action) by [bencgreenberg](https://github.com/bencgreenberg).
+
+Things changed:
 
 - Pull in the entire blog post instead of creating cards.
 - Calculate the difference and pull in that amount of posts.
