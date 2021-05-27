@@ -15,9 +15,8 @@ try {
 		const today = new Date();
 		const newBranchName = `dev-${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}-${today.getSeconds()}`;
 		const newBranchRef = `refs/heads/${newBranchName}`;
-		const postPath = "_posts/dev";
+		const postPath = "/content/blog/dev";
 		const baseBranch = "master";
-		const postCategory = "dev";
 		const prTitle = `DEV posts ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
 		let prNumber;
 		let prArray;
@@ -27,11 +26,11 @@ try {
 		let fetchPostContent;
 		let fetchPostTitle;
 		let fetchPostDate;
-		let fetchPostURL;
 		let fetchPosts;
 		let postDifference;
-		let jekyllFileName;
+		let markdownFileName;
 		let fileContents;
+		let postTags;
 		
 		/**
 		 * Create a branch
@@ -95,19 +94,18 @@ try {
 				.join("-")
 				.replace(/[^a-z0-9-]/gim, "")
 				.replace(/\:/gi, "-");
-			fetchPostURL = fetchPosts[index]["url"];
+			postTags = fetchPosts[index]["tag_list"];
 			fetchPostContent = cleanString(fetchPosts[index]["body_markdown"]);
-			jekyllFileName = `${fetchPostDate}-${fetchPostTitle}.md`;
+			markdownFileName = `${fetchPostDate}-${fetchPostTitle}.md`;
 
 			// Create Markdown File
 			fileContents = `      
----
-layout: post
-category: ${postCategory}
-date: ${fetchPostDate}
-title: ${fetchPostTitle}
-link: ${fetchPostURL}
----
++++
+title = ${fetchPostTitle}
+date = ${fetchPostDate}
+description = ${fetchPosts[index]["description"]}
+tags = ${postTags}
++++
 
 ${fetchPostContent}
 			`.trim();
@@ -122,7 +120,7 @@ ${fetchPostContent}
 			await tools.github.repos.createOrUpdateFileContents({
 				owner,
 				repo,
-				path: `${postPath}/${jekyllFileName}`,
+				path: `${postPath}/${markdownFileName}`,
 				message: `New markdown file for ${fetchPostTitle}`,
 				content: encodedContents,
 				branch: newBranchName,

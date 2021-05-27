@@ -1,4 +1,4 @@
-name: 'DEV to Jekyll action'
+name: 'DEV to Blog action'
 description: 'Fetch DEV posts and convert them into markdown'
 runs:
   using: 'node12'
